@@ -54,7 +54,7 @@ Without `--docker` the laptop still runs the two prepared workloads natively, bu
 `--docker-network bridge` gives jobs internet (for pip/datasets); default is none. `--ram-gb 8 --cpus 2` set container limits.
 Closing the laptop or the agent makes the provider offline after 20 s: running jobs are re-queued. On agent restart, leftover containers are removed.
 
-## 4. Demo script (about 7 minutes)
+## 4. Overview
 1. **Pool**: Omkar's RTX 2050 (4 GB) online and free. **Connect** page shows the addresses (Tailscale one for remote users).
 2. **Editor**: Kalash writes `proj/train.py` in the browser editor and saves; Komal and Bhoomika do the same in their own projects (each sees only their own files).
 3. Three people press **Run on GPU** within seconds (priorities 2, 5, 3). Scheduler order: Komal, Bhoomika, Kalash. Others show why they wait.
@@ -80,7 +80,7 @@ python -m unittest discover -s . -t . -p "test_*.py"
 67 tests: constraints, atomic commit, forced-kill of the scheduler inside the commit transaction (5 runs), agent protocol,
 provider offline / agent restart / server restart, path-escape, Docker command lock-down, editor privacy, terminal relay, stop button, token checks, role guard, CSRF, validation.
 
-## Limits (be honest in the viva)
+## Current Limits 
 * The Docker path (containers, GPU passthrough, `docker exec` terminal) could not be run in the build environment: command construction,
   agent logic and the relay are unit-tested, but the real container run must be verified on Omkar's laptop (step 2 above).
 * GPU memory is capped only for PyTorch code; TensorFlow users' declared memory is advisory (the job is still killed on timeout).
