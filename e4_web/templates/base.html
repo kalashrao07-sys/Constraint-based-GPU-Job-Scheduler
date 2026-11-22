@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}GPU Job Scheduler{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <div class="brand">GPU Job Scheduler <span>Team 7 · KLE Tech</span></div>
+  {% if user %}
+  <nav>
+    <a href="{{ url_for('new_job') }}">Submit job</a>
+    <a href="{{ url_for('jobs') }}">{{ 'All jobs' if user.role == 'admin' else 'My jobs' }}</a>
+    <a href="{{ url_for('pool') }}">GPU pool</a>
+    {% if user.role == 'admin' %}<a href="{{ url_for('admin') }}">Admin</a>{% endif %}
+    <form method="post" action="{{ url_for('logout') }}" class="inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="link">Sign out ({{ user.username }})</button>
+    </form>
+  </nav>
+  {% endif %}
+</header>
+<main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

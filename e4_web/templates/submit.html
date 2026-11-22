@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Submit a job{% endblock %}
+{% block content %}
+<section class="card narrow">
+  <h1>Submit a GPU job</h1>
+  <p class="hint">Pick one of the two prepared workloads. You declare how much GPU memory the job needs and how long it may run;
+     the scheduler places it on a GPU that can hold it and is free. Largest GPU in the pool: <b>{{ max_gpu }} GB</b>
+     (jobs close to the full size may fail because the driver needs some memory).</p>
+  <form method="post" action="{{ url_for('jobs') }}" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Workload
+      <select name="template">
+        {% for key, label in workloads.items() %}
+        <option value="{{ key }}" {{ 'selected' if form.get('template') == key }}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      {% if errors.template %}<span class="err">{{ errors.template }}</span>{% endif %}
+    </label>
+    <label>GPU memory needed (GB)
+      <input name="memory_gb" inputmode="decimal" value="{{ form.get('memory_gb', '') }}" required>
+      {% if errors.memory_gb %}<span class="err">{{ errors.memory_gb }}</span>{% endif %}
+    </label>
+    <label>Run time (minutes, e.g. 0.5 = 30 seconds)
+      <input name="duration_min" inputmode="decimal" value="{{ form.get('duration_min', '') }}" required>
+      {% if errors.duration_min %}<span class="err">{{ errors.duration_min }}</span>{% endif %}
+    </label>
+    <label>Priority (1 = lowest, 5 = highest)
+      <input name="priority" inputmode="numeric" value="{{ form.get('priority', '') }}" required>
+      {% if errors.priority %}<span class="err">{{ errors.priority }}</span>{% endif %}
+    </label>
+    <label>Deadline (optional, for your own record; it does not change scheduling)
+      <input name="deadline" type="datetime-local" value="{{ form.get('deadline', '') or '' }}">
+      {% if errors.deadline %}<span class="err">{{ errors.deadline }}</span>{% endif %}
+    </label>
+    <button class="primary">Submit job</button>
+  </form>
+</section>
+{% endblock %}

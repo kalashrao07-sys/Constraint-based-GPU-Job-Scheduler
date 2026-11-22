@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Job {{ job.job_id }}{% endblock %}
+{% block content %}
+<section class="card" id="job" data-job-id="{{ job.job_id }}">
+  <h1>Job #{{ job.job_id }}</h1>
+  <p class="state"><span class="badge {{ job.state }}" data-field="state">{{ job.state }}</span></p>
+  <p data-field="message" class="hint"></p>
+  <table class="kv">
+    <tr><th>Workload</th><td>{{ workloads.get(job.template, job.template) }}</td></tr>
+    <tr><th>Memory / run time / priority</th><td>{{ job.memory_gb }} GB · {{ job.duration_min }} min · priority {{ job.priority }}</td></tr>
+    <tr><th>Submitted</th><td>{{ job.submitted_at | dt }}</td></tr>
+    <tr><th>Deadline (record only)</th><td>{{ job.deadline or '-' }}</td></tr>
+    <tr><th>GPU</th><td data-field="gpu_name">{{ job.gpu_name or '-' }}</td></tr>
+    <tr><th>Place in queue</th><td data-field="queue_position">{{ job.queue_position or '-' }}</td></tr>
+    <tr><th>Result</th><td data-field="result_note">{{ job.result_note or '-' }}</td></tr>
+  </table>
+  <p class="hint">This page refreshes by itself every few seconds.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Jobs{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>{{ 'All jobs' if user.role == 'admin' else 'My jobs' }}</h1>
+  {% if jobs %}
+  <table>
+    <thead><tr><th>#</th>{% if user.role == 'admin' %}<th>User</th>{% endif %}<th>Workload</th><th>Memory</th><th>Time</th><th>Priority</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for j in jobs %}
+      <tr>
+        <td><a href="{{ url_for('job_detail', job_id=j.job_id) }}">{{ j.job_id }}</a></td>
+        {% if user.role == 'admin' %}<td>{{ j.username }}</td>{% endif %}
+        <td>{{ workloads.get(j.template, j.template) }}</td>
+        <td>{{ j.memory_gb }} GB</td><td>{{ j.duration_min }} min</td><td>{{ j.priority }}</td>
+        <td><span class="badge {{ j.state }}">{{ j.state }}</span>{% if j.held_reason %} <span class="hint">{{ j.held_reason }}</span>{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="hint">No jobs yet. <a href="{{ url_for('new_job') }}">Submit one</a>.</p>{% endif %}
+</section>
+{% endblock %}
